@@ -29,6 +29,28 @@ body {
   min-height: 100vh;
 }
 
+body.lightning-flash {
+  animation: lightningFlash 0.2s;
+  background: #fffbe6 !important;
+}
+
+@keyframes lightningFlash {
+  0% { background: #fffbe6; }
+  50% { background: #fff; }
+  100% { background: inherit; }
+}
+
+body.red-flash {
+  animation: redFlash 0.2s;
+  background: #ffdddd !important;
+}
+
+@keyframes redFlash {
+  0% { background: #ffdddd; }
+  50% { background: #ff0000; }
+  100% { background: inherit; }
+}
+
 .container {
   max-width: 750px;
   width: 100%;
@@ -194,4 +216,14 @@ button:hover {
   0% { filter: brightness(1.2); }
   50% { filter: brightness(0.8); }
   100% { filter: brightness(1); }
+}
+
+.water-can {
+  width: 60px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 auto;
+  cursor: pointer;
 }
