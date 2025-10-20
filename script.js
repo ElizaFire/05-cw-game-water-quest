@@ -1,54 +1,161 @@
-// Game configuration and state variables
-const GOAL_CANS = 25;        // Total items needed to collect
-let currentCans = 0;         // Current number of items collected
-let gameActive = false;      // Tracks if game is currently running
-let spawnInterval;          // Holds the interval for spawning items
+/* ===============================
+   Clean Water For All - Game Logic
+   =============================== */
 
-// Creates the 3x3 game grid where items will appear
+// Game state variables
+let score = 0;
+let timeLeft = 30;
+let gameActive = false;
+let spawnInterval, countdownInterval;
+
+// Game configuration
+const MOLE_POPUP_TIME = 1000; // milliseconds (how long mole stays up)
+const MOLE_SPAWN_RATE = 900;  // how often new mole appears
+
+// Select DOM elements
+const grid = document.querySelector(".game-grid");
+const scoreDisplay = document.getElementById("score");
+const timerDisplay = document.getElementById("timer");
+const startButton = document.getElementById("start-game");
+
+// -------------------------------
+// Create the 9-hole grid
+// -------------------------------
 function createGrid() {
-  const grid = document.querySelector('.game-grid');
-  grid.innerHTML = ''; // Clear any existing grid cells
+  grid.innerHTML = "";
   for (let i = 0; i < 9; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'grid-cell'; // Each cell represents a grid square
+    const cell = document.createElement("div");
+    cell.classList.add("grid-cell");
     grid.appendChild(cell);
   }
 }
+createGrid(); // run once on load
 
-// Ensure the grid is created when the page loads
-createGrid();
+// -------------------------------
+// Spawn a random mole
+// -------------------------------
+function spawnMole() {
+  if (!gameActive) return;
 
-// Spawns a new item in a random grid cell
-function spawnWaterCan() {
-  if (!gameActive) return; // Stop if the game is not active
-  const cells = document.querySelectorAll('.grid-cell');
-  
-  // Clear all cells before spawning a new water can
-  cells.forEach(cell => (cell.innerHTML = ''));
+  const cells = document.querySelectorAll(".grid-cell");
+  cells.forEach(cell => {
+    cell.innerHTML = ""; // clear any existing moles
+    cell.classList.remove("active");
+  });
 
-  // Select a random cell from the grid to place the water can
+  // Pick a random cell
   const randomCell = cells[Math.floor(Math.random() * cells.length)];
 
-  // Use a template literal to create the wrapper and water-can element
-  randomCell.innerHTML = `
-    <div class="water-can-wrapper">
-      <div class="water-can"></div>
-    </div>
-  `;
+  // Create mole wrapper and mole element
+  const moleWrapper = document.createElement("div");
+  moleWrapper.classList.add("mole-wrapper");
+
+  const mole = document.createElement("div");
+  mole.classList.add("mole");
+
+  // 50/50 chance for clean or dirty mole
+  const isDirty = Math.random() < 0.5;
+  mole.classList.add(isDirty ? "dirty" : "clean");
+
+  // Apply mole image (ensure your mole.png is in /img folder)
+  mole.style.backgroundImage = "url('img/mole.png')";
+
+  // Add click handler
+  mole.addEventListener("click", () => handleMoleClick(isDirty, mole));
+
+  // Assemble and show mole
+  moleWrapper.appendChild(mole);
+  randomCell.appendChild(moleWrapper);
+  randomCell.classList.add("active");
+
+  // Remove mole after popup time
+  setTimeout(() => {
+    if (randomCell.contains(moleWrapper)) {
+      randomCell.innerHTML = "";
+      randomCell.classList.remove("active");
+    }
+  }, MOLE_POPUP_TIME);
 }
 
-// Initializes and starts a new game
+// -------------------------------
+// Handle mole clicks
+// -------------------------------
+function handleMoleClick(isDirty, mole) {
+  if (!gameActive) return;
+
+  // Prevent multiple clicks on same mole
+  mole.style.pointerEvents = "none";
+
+  mole.classList.add("hit-effect");
+
+  if (isDirty) {
+    score += 10;
+  } else {
+    score -= 5; // optional penalty for hitting clean mole
+  }
+
+  // Update score
+  scoreDisplay.textContent = score;
+
+  // Remove mole visually after click
+  setTimeout(() => {
+    mole.parentElement?.parentElement?.classList.remove("active");
+    mole.parentElement?.remove();
+  }, 150);
+}
+
+// -------------------------------
+// Start or Restart Game
+// -------------------------------
 function startGame() {
-  if (gameActive) return; // Prevent starting a new game if one is already active
+  if (gameActive) return;
+
+  // Reset values
+  score = 0;
+  timeLeft = 30;
+  scoreDisplay.textContent = score;
+  timerDisplay.textContent = timeLeft;
+
+  // Clean up any game-over message
+  const oldMessage = document.querySelector(".game-over");
+  if (oldMessage) oldMessage.remove();
+
   gameActive = true;
-  createGrid(); // Set up the game grid
-  spawnInterval = setInterval(spawnWaterCan, 1000); // Spawn water cans every second
+  createGrid();
+
+  // Start mole spawning
+  spawnInterval = setInterval(spawnMole, MOLE_SPAWN_RATE);
+
+  // Countdown timer
+  countdownInterval = setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
 }
 
+// -------------------------------
+// End Game
+// -------------------------------
 function endGame() {
-  gameActive = false; // Mark the game as inactive
-  clearInterval(spawnInterval); // Stop spawning water cans
+  gameActive = false;
+  clearInterval(spawnInterval);
+  clearInterval(countdownInterval);
+
+  // Clear any remaining moles
+  document.querySelectorAll(".grid-cell").forEach(cell => (cell.innerHTML = ""));
+
+  // Display game-over message
+  const gameOver = document.createElement("div");
+  gameOver.classList.add("game-over");
+  gameOver.textContent = `Game Over! Final Score: ${score}`;
+  grid.insertAdjacentElement("afterend", gameOver);
 }
 
-// Set up click handler for the start button
-document.getElementById('start-game').addEventListener('click', startGame);
+// -------------------------------
+// Event Listeners
+// -------------------------------
+startButton.addEventListener("click", startGame);
