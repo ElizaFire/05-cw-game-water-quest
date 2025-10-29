@@ -4,25 +4,67 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>Clean Water For All</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Clean Water For All</h1>
-    <p class="game-instructions">
-      🫣Hit the moles holding dirty water! Avoid the clean ones.🫣
-    </p>
+  <main class="container">
+    <!-- SIDE CONTROLS -->
+    <aside class="side-controls">
+      <h1>Clean Water For All</h1>
+      <p class="game-instructions">
+        <span class="emoji">🫣</span>
+        Hit the moles holding dirty water! Avoid the clean ones.
+        <span class="emoji">🫣</span><br>
+        PLEASE DON'T DESTROY OUR JERRY CANS!!!!
+      </p>
 
-    <div class="stats">
-      <p>Score: <span id="score">0</span></p>
-      <p>Time Left: <span id="timer">60</span>s</p>
-    </div>
+      <div class="controls-group">
+        <label for="difficulty">Select Difficulty:</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="normal" selected>Normal</option>
+          <option value="hard">Hard</option>
+        </select>
+        <div class="button-row">
+          <button id="start-game" type="button">Start Game</button>
+          <button id="reset-game" type="button">Reset Game</button>
+        </div>
+      </div>
 
-    <div class="game-grid"></div>
+      <!-- FACT BOX MOVED HERE -->
+      <div class="fact-box">
+        <p>
+          <img src="img/water-can.png" alt="Water Can" style="height:1.5em;vertical-align:middle;margin-right:8px;">
+          <span id="water-fact"></span>
+        </p>
+      </div>
+    </aside>
 
-    <button id="start-game">Start Game</button>
-    <button id="reset-game">Reset Game</button>
-  </div>
+    <!-- GAME AREA -->
+    <section class="game-area">
+      <div class="game-box">
+        <div class="stats" aria-live="polite">
+          <p>Score: <span id="score">0</span></p>
+          <p>Time Left: <span id="timer">90</span>s</p>
+          <div id="milestone-container" aria-live="polite"></div>
+        </div>
+        <div class="progress-container">
+          <div id="progress-bar"></div>
+          <p id="progress-text">Clean water delivered: 0%</p>
+        </div>
+        <div class="game-grid" aria-label="Game grid"></div>
+      </div>
+    </section>
+  </main>
+
+  
+
+  <!-- Charity Water popup dynamically injected by JS -->
+  <div id="popup-container"></div>
+
+  <!-- Preload Sounds -->
+  <audio id="sound-water" src="sounds/water.mp3" preload="auto" loop></audio>
+  <audio id="sound-happy" src="sounds/happyppl.mp3" preload="auto"></audio>
 
   <script src="script.js"></script>
 </body>

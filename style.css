@@ -1,113 +1,473 @@
-/* ============================
-   Charity: water Theme + Layout
-   ============================ */
+/* Charity: water Theme + Layout */
 
 :root {
-  --yellow: #FFC907;
-  --blue: #2E9DF7;
-  --light-blue: #8BD1CB;
-  --green: #4FCB53;
-  --orange: #FF902A;
-  --red: #F5402C;
-  --dark-green: #159A48;
-  --pink: #F16061;
+  --red: #F94F5E;
+  --yellow: #FFDA48;
+  --teal: #3FBFBB;
+  --light-blue: #A5DCEO;
+  --dark: #28403F;
+  --beige: #F3CC98;
+  --primary-bg: #FFDA48;
+  --primary-text: #28403F;
+  --accent: #F94F5E;
+  --secondary-bg: #A5DCEO;
+  --secondary-text: #3FBFBB;
+  --highlight: #F3CC98;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-  font-family: "Avenir", "Proxima Nova", Arial, sans-serif;
-  background: linear-gradient(to bottom right, var(--blue), var(--light-blue));
-  margin: 0;
-  padding: 30px;
-  color: #333;
+  font-family: "Proxima Nova Black", "Avenir", Georgia;
+  background-color: var(--beige);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  margin: 0;
 }
 
-body.lightning-flash {
-  animation: lightningFlash 0.2s;
-  background: #fffbe6 !important;
-}
+body.lightning-flash { animation: lightningFlash 0.2s; background: #fffbe6 !important; }
+@keyframes lightningFlash { 0% { background: #fffbe6; } 50% { background: #fff; } 100% { background: inherit; } }
 
-@keyframes lightningFlash {
-  0% { background: #fffbe6; }
-  50% { background: #fff; }
-  100% { background: inherit; }
-}
-
-body.red-flash {
-  animation: redFlash 0.2s;
-  background: #ffdddd !important;
-}
-
-@keyframes redFlash {
-  0% { background: #ffdddd; }
-  50% { background: #ff0000; }
-  100% { background: inherit; }
-}
+body.red-flash { animation: redFlash 0.2s; background: #ffdddd !important; }
+@keyframes redFlash { 0% { background: #ffdddd; } 50% { background: #ff0000; } 100% { background: inherit; } }
 
 .container {
-  max-width: 750px;
-  width: 100%;
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  box-shadow: none;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 40px;
+  align-items: start;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.side-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  min-width: 340px;
 }
 
 h1 {
-  color: var(--yellow);
-  font-size: 34px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 2.8rem;
+  color: var(--primary-text);
+  text-align: center;
+  margin-bottom: 4px;
+  margin-top: 0;
 }
 
 .game-instructions {
-  font-size: 18px;
-  margin-bottom: 25px;
-  color: #444;
+  font-size: 1.25rem;
+  color: var(--primary-text);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+
+.controls-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.controls-group label[for="difficulty"] {
+  font-size: 1.25rem;
+  color: #28403F;
+  font-weight: 700;
+  font-family: "Proxima Nova Black", "Avenir", Georgia;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
 }
 
 .stats {
   display: flex;
   justify-content: space-around;
   background-color: #f9f9f9;
-  padding: 15px 0;
+  padding: 8px 0;
   border-radius: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 14px;
   border: 2px solid var(--yellow);
 }
-
 .stats p {
   margin: 0;
-  font-size: 18px;
+  font-size: 1.2rem;
   font-weight: bold;
-  color: var(--dark-green);
+  color: #FFDA48;
 }
 
-/* ============================
-   Mole Hill Grid
-   ============================ */
+/* Main game box background */
+.game-box {
+  background: #28403F;
+  border-radius: 18px;
+  padding: 32px 16px;
+  margin: 0 auto;
+  max-width: 500px;
+  box-shadow: 0 4px 24px #2228;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+/* Score/Timer/Progress styles */
+.stats, .progress-container, .game-grid {
+  width: 100%;
+  max-width: 100vw;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.stats {
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+
+.progress-container {
+  width: 100%;
+  height: 20px;
+  background: none; /* no background */
+  border: 2px solid #ffda48; /* optional subtle outline */
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #00bfff; /* bright blue progress */
+  border-radius: 10px;
+  transition: width 0.5s ease; /* smooth animation */
+}
+
+
+#progress-text {
+  text-align: center;
+  color: #FFDA48;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+/* Game grid larger and styled */
 .game-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin: 0 auto;
-  max-width: 300px;
-  background-image: url('water-can.png');
-  background-size: 220px 220px;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 15px;
+  margin: 32px auto 0 auto;
+  max-width: 500px;
+  min-width: 320px;
+  min-height: 300px;
+  background: #28403F;
+  border-radius: 16px;
+  position: relative;
+  box-shadow: 0 2px 12px #2224;
+}
+
+/* Fact box styles */
+/* Fact box: gold text, dark emoji */
+.fact-box {
+  background: #F94f5E;
+  border-radius: 16px;
+  padding: 22px 16px;
+  margin-top: 18px;
+  text-align: center;
+  color: #FFDA48; /* gold text */
+  font-style: italic;
+  font-weight: bold;
+  font-size: 1.35em;
+  box-shadow: 0 4px 24px #F94f5E88, 0 2px 12px #2224;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.5s;
+  width: 100%;
+  max-width: 340px;
+  border: 3px solid #28403F;
+  animation: factPulse 2.5s infinite;
+}
+
+@keyframes factPulse {
+  0%, 100% { box-shadow: 0 0 16px 4px #F94f5E88, 0 2px 12px #2224; }
+  50% { box-shadow: 0 0 32px 12px #FFDA4888, 0 2px 12px #2224; }
+}
+
+.fact-box p {
+  margin: 0;
+  font-size: 1.35em;
+  text-shadow: 0 2px 8px #222, 0 0 8px #FFDA48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFDA48; /* gold text */
+}
+
+.fact-box p::before {
+  content: none;
+}
+
+/* General body text */
+body, .side-controls, .controls-group, .game-instructions {
+  color: #28403F;
+}
+
+/* Button text: gold on dark */
+.button-row button,
+button#start-game,
+button#reset-game {
+  color: #FFDA48 !important;
+}
+
+/* Stats and progress: gold */
+.stats p,
+#progress-text {
+  color: #FFDA48;
+}
+
+/* Remove pure white from other text areas if present */
+
+.mole {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  height: 60%;
+  transform: translate(-50%, -50%);
+  background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
-  min-height: 220px;
-  border-radius: 30px;
-  background-color: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.clean-water,
+.dirty-water {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.clean-water {
+  background-color: blue;
+}
+
+.dirty-water {
+  background-color: red;
+}
+
+.can {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 50%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url('img/water-can.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.puff {
+  animation: puff 0.35s linear;
+}
+
+@keyframes puff {
+  0% { box-shadow: 0 0 0 0 #fff; }
+  50% { box-shadow: 0 0 24px 12px #fff; }
+  100% { box-shadow: 0 0 0 0 #fff; }
+}
+
+.flash-white {
+  animation: flashWhite 0.3s;
+}
+@keyframes flashWhite {
+  0% { background: #fff; }
+  100% { background: transparent; }
+}
+
+.flash-red {
+  animation: flashRed 0.3s;
+}
+@keyframes flashRed {
+  0% { background: #ff4d4d; }
+  100% { background: transparent; }
+}
+
+#progress-bar {
+  width: 0%;
+  height: 16px;
+  background: #4fc3f7;
+  border-radius: 8px;
+  transition: width 0.3s;
+}
+
+#popup-container {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px #3338;
+  padding: 32px;
+  text-align: center;
+  max-width: 340px;
+  margin: auto;
+}
+
+.popup.red {
+  background: #ff4d4d;
+  color: #fff;
+}
+
+/* Success popup background and size */
+.popup.success {
+  background: #FFDA48 !important;
+  color: #000 !important;
+  max-width: 540px;
+  min-width: 360px;
+  min-height: 360px;
+  box-shadow: 0 8px 48px #3338;
+  padding: 56px 40px;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Popup logo larger */
+.popup .logo {
+  width: 180px;
+  margin-bottom: 28px;
+}
+
+/* Popup message paragraph text color */
+.popup-message {
+  color: #000 !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+/* Popup buttons equal size, background, and bold text */
+.popup .button-row {
+  margin-top: 32px;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.popup .btn,
+.popup .btn.donate,
+.popup .btn.play-again {
+  min-width: 150px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: none;
+  background: #28403F !important;
+  color: #FFDA48 !important;
+  font-weight: bold !important;
+  font-size: 1.15em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 8px #2224;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.popup .btn:hover,
+.popup .btn:focus,
+.popup .btn.donate:hover,
+.popup .btn.donate:focus,
+.popup .btn.play-again:hover,
+.popup .btn.play-again:focus {
+  background: #F94F5E !important;
+  color: #28403F !important;
+  transform: scale(1.05);
+  outline: none;
+}
+
+/* Difficulty dropdown styling */
+#difficulty {
+  background: #28403F !important;
+  color: #FFDA48 !important;
+  font-weight: 900 !important;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin-bottom: 4px;
+  text-align: center;
+  font-family: inherit;
+  box-shadow: 0 2px 8px #2224;
+  outline: none;
+  appearance: none;
+}
+
+#difficulty option {
+  background: #28403F !important;
+  color: #FFDA48 !important;
+  font-weight: 900 !important;
+  font-size: 1.1em;
+  font-family: inherit;
+}
+
+/* Button styling */
+.button-row button,
+button#start-game,
+button#reset-game {
+  background: #28403F !important;
+  color: #FFDA48 !important;
+  font-weight: 900 !important;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 2px 8px #2224;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.button-row button:hover,
+.button-row button:focus,
+button#start-game:hover,
+button#reset-game:hover {
+  background: #FFDA48 !important;
+  color: #28403F !important;
+  transform: scale(1.05);
+  outline: none;
 }
 
 .grid-cell {
@@ -119,111 +479,35 @@ h1 {
   cursor: pointer;
   box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease;
+  min-height: 60px;
 }
 
 .grid-cell:hover {
   transform: scale(1.05);
 }
 
-/* ============================
-   Mole & Animation
-   ============================ */
-
-.mole-wrapper {
+/* Milestone popup styles */
+#milestone-container {
   position: absolute;
-  bottom: -100px; /* starts hidden below */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 100px;
-  transition: bottom 0.3s ease;
-}
-
-.mole {
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-/* Pop-up animation */
-.grid-cell.active .mole-wrapper {
-  bottom: 0; /* pops up */
-}
-
-/* Clean vs Dirty Water Indicators */
-.mole.clean::after,
-.mole.dirty::after {
-  content: '';
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
-.mole.clean::after {
-  background-color: var(--blue);
-  box-shadow: 0 0 10px var(--light-blue);
-}
-
-.mole.dirty::after {
-  background-color: var(--red);
-  box-shadow: 0 0 10px var(--orange);
-}
-
-/* ============================
-   Game Buttons
-   ============================ */
-
-button {
-  background-color: var(--yellow);
-  color: #333;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
+  min-height: 48px;
+  background: #3FBFBB; /* solid blue */
+  color: #FFDA48; /* yellow text */
+  font-family: "Proxima Nova Black", "Avenir", Georgia;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  display: none;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 25px;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  z-index: 10;
+  padding: 12px 0;
+  box-shadow: 0 2px 12px #2224;
+}
+.stats {
+  position: relative; /* for absolute positioning of milestone */
 }
 
-button:hover {
-  background-color: var(--orange);
-  transform: scale(1.05);
-}
-
-/* ============================
-   Game Over / Feedback (for JS)
-   ============================ */
-
-.game-over {
-  font-size: 22px;
-  font-weight: bold;
-  color: var(--red);
-  margin-top: 20px;
-}
-
-.hit-effect {
-  animation: hitFlash 0.2s ease;
-}
-
-@keyframes hitFlash {
-  0% { filter: brightness(1.2); }
-  50% { filter: brightness(0.8); }
-  100% { filter: brightness(1); }
-}
-
-.water-can {
-  width: 60px;
-  height: 60px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: 0 auto;
-  cursor: pointer;
-}
